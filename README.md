@@ -1,9 +1,23 @@
+# Simple Build Kit
+
+[![Build Status](https://travis-ci.org/lukaszmn/simple-build-kit.svg)](https://travis-ci.org/lukaszmn/simple-build-kit)
+[![npm version](https://badge.fury.io/js/simple-build-kit.svg)](https://badge.fury.io/js/simple-build-kit)
+
+
 # Introduction
 *Simple Build Kit* is a very lightweight build toolkit for Node.js only for copying files.
 
-It has no dependencies.
+It has no dependencies to other packages.
 
 All methods are synchronous and file operations use the UTF-8 encoding.
+
+# Download
+
+Get it from the [npm](https://www.npmjs.com/package/simple-build-kit) registry:
+
+```
+npm install --save-dev simple-build-kit
+```
 
 # Reference
 
