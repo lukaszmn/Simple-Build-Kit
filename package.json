@@ -1,0 +1,24 @@
+{
+  "name": "simple-build-kit",
+  "version": "1.0.0",
+  "description": "A very lightweight build toolkit for Node.js",
+  "main": "lib.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lukaszmn/Simple-Build-Kit.git"
+  },
+  "keywords": [
+    "build",
+    "node",
+    "fs"
+  ],
+  "author": "Łukasz Nojek",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lukaszmn/Simple-Build-Kit/issues"
+  },
+  "homepage": "https://github.com/lukaszmn/Simple-Build-Kit#readme"
+}
