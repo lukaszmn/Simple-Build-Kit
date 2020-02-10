@@ -16,7 +16,7 @@ function deleteFolder(folder) {
 
 function cleanFolder(folder) {
 	deleteFolder(folder);
-	fs.mkdirSync(folder);
+	createFolders(folder + '/');
 }
 
 function read(path) {
@@ -36,11 +36,29 @@ function save(path, contents) {
 }
 
 function createFolders(destination) {
+	function recursiveCreate(root, part) {
+		const pos = part.indexOf('/');
+		if (pos < 0) {
+			const newRoot = root + '/' + part;
+			if (!fs.existsSync(newRoot))
+				fs.mkdirSync(newRoot);
+		} else {
+			const prefix = part.substr(0, pos);
+			const suffix = part.substr(pos + 1);
+
+			const newRoot = root + '/' + prefix;
+			if (!fs.existsSync(newRoot))
+				fs.mkdirSync(newRoot);
+			if (suffix.length > 0)
+				recursiveCreate(newRoot, suffix);
+		}
+	}
+
 	if (destination.endsWith('/'))
-		fs.mkdirSync(destination, { recursive: true});
+		recursiveCreate('.', destination);
 	else if (destination.includes('/')) {
-		const folder = destination.replace(/\/[^\/]+$/, '');
-		fs.mkdirSync(folder, { recursive: true});
+		const folder = destination.replace(/\/[^\/]+$/, '/');
+		recursiveCreate('.', folder);
 	}
 }
 
