@@ -4,7 +4,7 @@
   "description": "A very lightweight build toolkit for Node.js",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "titef test.js"
   },
   "repository": {
     "type": "git",
@@ -20,5 +20,10 @@
   "bugs": {
     "url": "https://github.com/lukaszmn/Simple-Build-Kit/issues"
   },
-  "homepage": "https://github.com/lukaszmn/Simple-Build-Kit#readme"
+  "homepage": "https://github.com/lukaszmn/Simple-Build-Kit#readme",
+  "devDependencies": {
+    "fs-readdir-recursive": "^1.1.0",
+    "mock-fs": "^4.10.4",
+    "titef": "^2.2.2"
+  }
 }
