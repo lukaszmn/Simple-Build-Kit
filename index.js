@@ -38,7 +38,7 @@ function save(path, contents) {
 function createFolders(destination) {
 	if (destination.endsWith('/'))
 		fs.mkdirSync(destination, { recursive: true});
-	else {
+	else if (destination.includes('/')) {
 		const folder = destination.replace(/\/[^\/]+$/, '');
 		fs.mkdirSync(folder, { recursive: true});
 	}
@@ -53,7 +53,7 @@ function copy(source, destination) {
 
 	function internalCopy(src) {
 		const relativePath = folder === '.' ? src : src.substr(folder.length);
-		const dest = destination + relativePath;
+		const dest = destination.endsWith('/') ? destination + relativePath : destination;
 		createFolders(dest);
 		fs.copyFileSync(src, dest);
 	}
@@ -68,8 +68,8 @@ function copy(source, destination) {
 	if (pattern.indexOf('*') < 0 && pattern.indexOf('?') < 0) {
 		internalCopy(source);
 		return;
-	} else if (destination.endsWith('/'))
-		throw new Error('Cannot use folder destination for multiple source files');
+	} else if (!destination.endsWith('/'))
+		throw new Error('Cannot use destination file for multiple source files');
 
 	let patternRe = '^';
 	for (const part of pattern.split(/(\?|\*)/)) {
