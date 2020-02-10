@@ -1,8 +1,8 @@
 {
   "name": "simple-build-kit",
-  "version": "1.0.0",
+  "version": "0.9.1",
   "description": "A very lightweight build toolkit for Node.js",
-  "main": "lib.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
