@@ -1,7 +1,9 @@
 # Simple Build Kit
 
 [![Build Status](https://travis-ci.org/lukaszmn/simple-build-kit.svg)](https://travis-ci.org/lukaszmn/simple-build-kit)
-[![npm version](https://badge.fury.io/js/simple-build-kit.svg)](https://badge.fury.io/js/simple-build-kit)
+[![NPM version](https://img.shields.io/npm/v/simple-build-kit.svg)](https://npmjs.org/package/simple-build-kit)
+[![Dependency Status](http://img.shields.io/david/lukaszmn/simple-build-kit.svg)](https://david-dm.org/lukaszmn/simple-build-kit)
+[![License](http://img.shields.io/npm/l/fs-readdir-recursive.svg)](LICENSE)
 
 
 # Introduction
