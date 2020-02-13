@@ -1,3 +1,4 @@
+// const { suite, spec } = require('titef');
 const fs = require('fs');
 const mock = require('mock-fs');
 const assert = require('assert');
@@ -9,7 +10,6 @@ suite('delete folder', {
 	eachSetup() {
 		mock.restore();
 	},
-// @ts-ignore
 }, () => {
 
 	spec('missing', () => {
