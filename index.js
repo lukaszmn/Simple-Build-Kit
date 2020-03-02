@@ -105,8 +105,9 @@ function copy(source, destination) {
 	}
 
 	function internalCopy(src) {
-		const relativePath = folder === '.' ? src : src.substr(folder.length);
+		const relativePath = folder === '.' ? src : src.substr(folder.length + 1); // +1 for slash
 		const dest = destination.endsWith('/') ? destination + relativePath : destination;
+		// console.log({folder, src, relativePath, destination, dest});
 		_createFolders(dest, false);
 		fs.copyFileSync(src, dest);
 
