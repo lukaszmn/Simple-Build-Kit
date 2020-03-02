@@ -5,6 +5,7 @@ const assert = require('assert');
 const recurse = require('fs-readdir-recursive');
 
 const build = require('.');
+build.setSilent(true);
 
 suite('delete folder', {
 	eachSetup() {

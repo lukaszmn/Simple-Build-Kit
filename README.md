@@ -30,6 +30,9 @@ Types of arguments:
 
 Methods:
 
+## `setSilent(silent)`
+Enables or disabled silent mode. By default it's disabled. In silent mode no messages with the progress are printed to the console.
+
 ## `deleteFolder(folder)`
 Recursively deletes a folder. There is a check if the folder exists first, so it's safe to call this method always.
 
