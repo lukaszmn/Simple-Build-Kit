@@ -2,6 +2,11 @@ const fs = require('fs');
 
 let silence = false;
 
+/**
+ * Enables or disabled silent mode.
+ * In silent mode no messages with the progress are printed to the console.
+ * @param {boolean} silent Whether messages should be suppressed.
+ */
 function setSilent(silent) {
 	silence = silent;
 }
@@ -12,6 +17,11 @@ function log(msg) {
 }
 
 
+/**
+ * Recursively deletes a folder.
+ * There is a check if the folder exists first, so it's safe to call this method always.
+ * @param {string} folder Path to a folder, e.g. `assets` or `~/projects/first`.
+ */
 function deleteFolder(folder) {
 	_deleteFolder(folder, true);
 }
@@ -32,12 +42,22 @@ function _deleteFolder(folder, writeLog) {
 		log(`Deleted folder [${folder}]`);
 };
 
+
+/**
+ * First deletes the folder if it exists, then creates the folder.
+ * @param {string} folder Path to a folder, e.g. `assets` or `~/projects/first`.
+ */
 function cleanFolder(folder) {
 	_deleteFolder(folder, false);
 	_createFolders(folder + '/', false);
 	log(`Cleaned folder [${folder}]`);
 }
 
+
+/**
+ * Reads the file and returns its contents.
+ * @param {string} path Path to the file, e.g. `./file.js` or `/project/lib/file.js`.
+ */
 function read(path) {
 	return _read(path, true);
 }
@@ -48,6 +68,11 @@ function _read(path, writeLog) {
 	return res;
 }
 
+
+/**
+ * Reads all files and returns their content concatented.
+ * @param {string[]} paths Array of paths to the file, e.g. `['./file.js', '/project/lib/file.js']`.
+ */
 function concat(paths) {
 	let res = '';
 	for (const path of paths)
@@ -58,12 +83,24 @@ function concat(paths) {
 	return res;
 }
 
+
+/**
+ * Writes the contents to the file.
+ * If the destination folder doesn't exists, it will be created.
+ * @param {string} path Path to the file, e.g. `./file.js` or `/project/lib/file.js`.
+ * @param {string} contents Data to write.
+ */
 function save(path, contents) {
 	_createFolders(path, false);
 	fs.writeFileSync(path, contents);
 	log(`Saved to file [${path}]`);
 }
 
+
+/**
+ * Creates all missing folders for given path.
+ * @param {string} destination Path to a folder if it ends with `/`, and path to file otherwise , e.g. `./file.js` or `dest/`.
+ */
 function createFolders(destination) {
 	_createFolders(destination, true);
 }
@@ -98,6 +135,12 @@ function _createFolders(destination, writeLog) {
 }
 
 
+/**
+ * Copies source file(s) to the destination.
+ * If the `destination` folder does not exist, it will be created.
+ * @param {string} source File, folder or pattern of files to copy, e.g. `src/file.js`, `src/`, `src/*.js`.
+ * @param {string} destination Path to a folder if it ends with `/`, and path to file otherwise , e.g. `./file.js` or `dest/`.
+ */
 function copy(source, destination) {
 	function escapeRegExp(string) {
 		// (C) https://stackoverflow.com/a/6969486/1454656

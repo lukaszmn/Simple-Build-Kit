@@ -66,3 +66,49 @@ The `destination` can be:
 * `path/to/folder/` - destination folder. Source file(s) will be copied to the destination folder.
 
 If the `destination` folder does not exist, it will be created.
+
+
+# Example
+Below is an example build script for a Chrome extension that concatenates files and copies assets:
+```
+const build = require('simple-build-kit');
+
+function prepare() {
+	build.cleanFolder('dist');
+	build.createFolders('dist/assets');
+}
+
+function contentJS() {
+	const filesLib = [
+		'lib/firebase-app.js',
+		'lib/firebase-auth.js',
+		'lib/firebase-firestore.js'
+	];
+	const filesSrc = [
+		'src/database.js',
+		'src/ui.js',
+		'src/config.js',
+		'src/main.js'
+	];
+
+	let res = build.concat(filesLib);
+
+	// fix for https://github.com/firebase/firebase-js-sdk/issues/414
+	res = res.replace(/\\uffff\/\.test\("[^"]+"/, '\\uffff/.test(""');
+
+	res += build.concat(filesSrc);
+
+	build.save('dist/content.js', res);
+}
+
+function misc() {
+	build.copy('assets/*.png', 'dist/assets/');
+	build.copy('background.js', 'dist/');
+	build.copy('manifest.json', 'dist/');
+}
+
+
+prepare();
+contentJS();
+misc();
+```
