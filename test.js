@@ -1,3 +1,4 @@
+const { suite, spec } = require('titef');
 const fs = require('fs');
 const mock = require('mock-fs');
 const assert = require('assert');
@@ -9,7 +10,6 @@ suite('delete folder', {
 	eachSetup() {
 		mock.restore();
 	},
-// @ts-ignore
 }, () => {
 
 	spec('missing', () => {
@@ -62,7 +62,6 @@ suite('clean folder', {
 	eachSetup() {
 		mock.restore();
 	},
-// @ts-ignore
 }, () => {
 
 	spec('missing', () => {
@@ -118,7 +117,6 @@ suite('read', {
 	eachSetup() {
 		mock.restore();
 	},
-// @ts-ignore
 }, () => {
 
 	spec('a', () => {
@@ -164,7 +162,6 @@ suite('save', {
 	eachSetup() {
 		mock.restore();
 	},
-// @ts-ignore
 }, () => {
 
 	spec('c', () => {
@@ -235,7 +232,6 @@ suite('concat', {
 	eachSetup() {
 		mock.restore();
 	},
-// @ts-ignore
 }, () => {
 
 	spec('concat', () => {
@@ -258,7 +254,6 @@ suite('create folders', {
 	eachSetup() {
 		mock.restore();
 	},
-// @ts-ignore
 }, () => {
 
 	spec('c', () => {
@@ -353,7 +348,6 @@ suite('copy', {
 			}
 		});
 	},
-// @ts-ignore
 }, () => {
 
 	function getFiles() {
