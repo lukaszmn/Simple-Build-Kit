@@ -1,41 +1,73 @@
 const fs = require('fs');
 
+let silence = false;
+
+function setSilent(silent) {
+	silence = silent;
+}
+
+function log(msg) {
+	if (!silence)
+		console.log('[simple-build-kit] ' + msg);
+}
+
+
 function deleteFolder(folder) {
+	_deleteFolder(folder, true);
+}
+function _deleteFolder(folder, writeLog) {
 	if (fs.existsSync(folder)) {
 		const files = fs.readdirSync(folder);
 		files.forEach(file => {
 			const child = folder + '/' + file;
 			if (fs.lstatSync(child).isDirectory())
-				deleteFolder(child);
+				_deleteFolder(child, false);
 			else
 				fs.unlinkSync(child);
 		});
 		fs.rmdirSync(folder);
 	}
+
+	if (writeLog)
+		log(`Deleted folder [${folder}]`);
 };
 
 function cleanFolder(folder) {
-	deleteFolder(folder);
-	createFolders(folder + '/');
+	_deleteFolder(folder, false);
+	_createFolders(folder + '/', false);
+	log(`Cleaned folder [${folder}]`);
 }
 
 function read(path) {
-	return fs.readFileSync(path, 'utf-8');
+	return _read(path, true);
+}
+function _read(path, writeLog) {
+	const res = fs.readFileSync(path, 'utf-8');
+	if (writeLog)
+		log(`Read file [${path}]`);
+	return res;
 }
 
 function concat(paths) {
 	let res = '';
 	for (const path of paths)
-		res += read(path);
+		res += _read(path, false);
+
+	log('Concatened files: ' + paths.map(p => `[${p}]`).join(', '));
+
 	return res;
 }
 
 function save(path, contents) {
-	createFolders(path);
+	_createFolders(path, false);
 	fs.writeFileSync(path, contents);
+	log(`Saved to file [${path}]`);
 }
 
 function createFolders(destination) {
+	_createFolders(destination, true);
+}
+function _createFolders(destination, writeLog) {
 	function recursiveCreate(root, part) {
 		const pos = part.indexOf('/');
 		if (pos < 0) {
@@ -60,6 +92,9 @@ function createFolders(destination) {
 		const folder = destination.replace(/\/[^\/]+$/, '/');
 		recursiveCreate('.', folder);
 	}
+
+	if (writeLog)
+		log(`Created folder [${destination}]`);
 }
 
 
@@ -72,8 +107,10 @@ function copy(source, destination) {
 	function internalCopy(src) {
 		const relativePath = folder === '.' ? src : src.substr(folder.length);
 		const dest = destination.endsWith('/') ? destination + relativePath : destination;
-		createFolders(dest);
+		_createFolders(dest, false);
 		fs.copyFileSync(src, dest);
+
+		log(`Copied file [${src}] -> [${dest}]`);
 	}
 
 	if (source.endsWith('/'))
@@ -116,4 +153,4 @@ function copy(source, destination) {
 }
 
 
-module.exports = { deleteFolder, cleanFolder, read, concat, save, createFolders, copy };
+module.exports = { setSilent, deleteFolder, cleanFolder, read, concat, save, createFolders, copy };
