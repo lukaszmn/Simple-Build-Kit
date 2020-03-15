@@ -123,6 +123,7 @@ function _createFolders(destination, writeLog) {
 		}
 	}
 
+	destination = destination.replace(/\\/g, '/');
 	const root = (destination.includes(':') || destination.startsWith('/'))
 		? '' : '.';
 
@@ -154,6 +155,9 @@ function copy(source, destination) {
 
 		log(`Copied file [${src}] -> [${dest}]`);
 	}
+
+	source = source.replace(/\\/g, '/');
+	destination = destination.replace(/\\/g, '/');
 
 	if (source.endsWith('/'))
 		source += '*';
@@ -200,6 +204,7 @@ function copy(source, destination) {
  * @param {string} path File, folder or pattern of files to find, e.g. `src/file.js`, `src/`, `src/*.js`.
  */
 function list(path) {
+	path = path.replace(/\\/g, '/');
 	if (path.endsWith('/'))
 		path += '*';
 

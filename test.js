@@ -156,6 +156,18 @@ suite('read', {
 		assert.equal(res, 'test');
 	});
 
+	spec('dir\\b', () => {
+		mock({
+			'a': 'xyz',
+			'dir': {
+				'b': 'test',
+			}
+		});
+
+		const res = build.read('dir/b');
+		assert.equal(res, 'test');
+	});
+
 });
 
 
@@ -208,6 +220,21 @@ suite('save', {
 		assert.equal(fs.existsSync('c'), false);
 	});
 
+	spec('dir\\c', () => {
+		mock({
+			'a': 'xyz',
+			'dir': {
+				'b': 'test',
+			}
+		});
+
+		build.save('dir\\c', 'abc');
+		assert.equal(fs.readFileSync('a', 'utf-8'), 'xyz');
+		assert.equal(fs.readFileSync('dir/b', 'utf-8'), 'test');
+		assert.equal(fs.readFileSync('dir/c', 'utf-8'), 'abc');
+		assert.equal(fs.existsSync('c'), false);
+	});
+
 	spec('dir2/c', () => {
 		mock({
 			'a': 'xyz',
@@ -235,7 +262,7 @@ suite('concat', {
 	},
 }, () => {
 
-	spec('concat', () => {
+	spec('concat /', () => {
 		mock({
 			'a': '1\n',
 			'b': '2\n3',
@@ -245,6 +272,20 @@ suite('concat', {
 		});
 
 		const res = build.concat(['a', 'b', 'dir/c']);
+		assert.equal(res, '1\n2\n34');
+	});
+
+
+	spec('concat \\', () => {
+		mock({
+			'a': '1\n',
+			'b': '2\n3',
+			'dir': {
+				'c': '4'
+			}
+		});
+
+		const res = build.concat(['a', 'b', 'dir\\c']);
 		assert.equal(res, '1\n2\n34');
 	});
 
@@ -302,6 +343,30 @@ suite('create folders', {
 		});
 
 		build.createFolders('dir/c/');
+		assert.equal(fs.existsSync('dir/c'), true);
+	});
+
+	spec('dir\\c', () => {
+		mock({
+			'a': 'xyz',
+			'dir': {
+				'b': 'test',
+			}
+		});
+
+		build.createFolders('dir\\c');
+		assert.equal(fs.existsSync('dir/c'), false);
+	});
+
+	spec('dir\\c\\', () => {
+		mock({
+			'a': 'xyz',
+			'dir': {
+				'b': 'test',
+			}
+		});
+
+		build.createFolders('dir\\c\\');
 		assert.equal(fs.existsSync('dir/c'), true);
 	});
 
@@ -416,6 +481,19 @@ suite('copy', {
 		assert.equal(fs.readFileSync('dist/c.png', 'utf-8'), 'file-c');
 	});
 
+	spec('assets\\*.png -> dist\\', () => {
+		build.copy('assets\\*.png', 'dist\\');
+
+		const files = getFiles();
+		assert.deepEqual(files, [
+			'a', 'assets/b.png', 'assets/c.png', 'assets/d.png.gif', 'assets/e',
+			'dist/b.png', 'dist/c.png'
+		]);
+
+		assert.equal(fs.readFileSync('dist/b.png', 'utf-8'), 'file-b');
+		assert.equal(fs.readFileSync('dist/c.png', 'utf-8'), 'file-c');
+	});
+
 	spec('assets/? -> dist/', () => {
 		build.copy('assets/?', 'dist/');
 
@@ -499,6 +577,12 @@ suite('list', {
 
 	spec('assets/*.png', () => {
 		const files = build.list('assets/*.png');
+
+		assert.deepEqual(files, ['assets/b.png', 'assets/c.png']);
+	});
+
+	spec('assets\\*.png', () => {
+		const files = build.list('assets\\*.png');
 
 		assert.deepEqual(files, ['assets/b.png', 'assets/c.png']);
 	});
