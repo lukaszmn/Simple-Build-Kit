@@ -468,3 +468,63 @@ suite('copy', {
 	});
 
 });
+
+
+suite('list', {
+	eachSetup() {
+		mock.restore();
+		mock({
+			'a': 'file-a',
+			'assets': {
+				'b.png': 'file-b',
+				'c.png': 'file-c',
+				'd.png.gif': 'file-d',
+				'e': 'file-e'
+			}
+		});
+	},
+}, () => {
+
+	spec('a', () => {
+		const files = build.list('a');
+
+		assert.deepEqual(files, ['a']);
+	});
+
+	spec('assets/', () => {
+		const files = build.list('assets/');
+
+		assert.deepEqual(files, ['assets/b.png', 'assets/c.png', 'assets/d.png.gif', 'assets/e']);
+	});
+
+	spec('assets/*.png', () => {
+		const files = build.list('assets/*.png');
+
+		assert.deepEqual(files, ['assets/b.png', 'assets/c.png']);
+	});
+
+	spec('assets/?', () => {
+		const files = build.list('assets/?');
+
+		assert.deepEqual(files, ['assets/e']);
+	});
+
+	spec('assets/g*', () => {
+		const files = build.list('assets/g*');
+
+		assert.deepEqual(files, []);
+	});
+
+	spec('assets/?*', () => {
+		const files = build.list('assets/?*');
+
+		assert.deepEqual(files, ['assets/b.png', 'assets/c.png', 'assets/d.png.gif', 'assets/e']);
+	});
+
+	spec('assets/*?', () => {
+		const files = build.list('assets/*?');
+
+		assert.deepEqual(files, ['assets/b.png', 'assets/c.png', 'assets/d.png.gif', 'assets/e']);
+	});
+
+});

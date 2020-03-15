@@ -67,6 +67,14 @@ The `destination` can be:
 
 If the `destination` folder does not exist, it will be created.
 
+## `list(path)`
+Lists files matching a pattern
+
+The `path` can be:
+* `path/to/file.js` - Just the `file.js` will be returned.
+* `path/to/folder/` - all files from the `folder` will returned.
+* `path/to/file*.png` - all files matching the pattern will be returned. Possible wildcards: `*` and `?`.
+
 
 # Example
 Below is an example build script for a Chrome extension that concatenates files and copies assets:
