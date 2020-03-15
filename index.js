@@ -142,11 +142,6 @@ function _createFolders(destination, writeLog) {
  * @param {string} destination Path to a folder if it ends with `/`, and path to file otherwise , e.g. `./file.js` or `dest/`.
  */
 function copy(source, destination) {
-	function escapeRegExp(string) {
-		// (C) https://stackoverflow.com/a/6969486/1454656
-		return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
-	}
-
 	function internalCopy(src) {
 		const relativePath = folder === '.' ? src : src.substr(folder.length + 1); // +1 for slash
 		const dest = destination.endsWith('/') ? destination + relativePath : destination;
@@ -197,4 +192,57 @@ function copy(source, destination) {
 }
 
 
-module.exports = { setSilent, deleteFolder, cleanFolder, read, concat, save, createFolders, copy };
+/**
+ * Lists files matching a pattern
+ * @param {string} path File, folder or pattern of files to find, e.g. `src/file.js`, `src/`, `src/*.js`.
+ */
+function list(path) {
+	if (path.endsWith('/'))
+		path += '*';
+
+	const pos = path.lastIndexOf('/');
+	const folder = pos < 0 ? '.' : path.substr(0, pos);
+	const pattern = pos < 0 ? path : path.substr(pos + 1);
+
+	const files = [];
+
+	if (pattern.indexOf('*') < 0 && pattern.indexOf('?') < 0) {
+		files.push(path);
+		return files;
+	}
+
+	let patternRe = '^';
+	for (const part of pattern.split(/(\?|\*)/)) {
+		if (part === '?')
+			patternRe += '.';
+		else if (part === '*')
+			patternRe += '.*';
+		else
+			patternRe += escapeRegExp(part);
+	}
+	patternRe += '$';
+	const re = new RegExp(patternRe);
+
+	const folders = [folder];
+	while (folders.length > 0) {
+		const currentFolder = folders.shift();
+
+		for (const file of fs.readdirSync(currentFolder)) {
+			const src = currentFolder + '/' + file;
+			if (fs.lstatSync(src).isDirectory())
+				folders.push(src);
+			else if (re.test(file))
+				files.push(src);
+		}
+	}
+
+	return files;
+}
+
+function escapeRegExp(string) {
+	// (C) https://stackoverflow.com/a/6969486/1454656
+	return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+
+
+module.exports = { setSilent, deleteFolder, cleanFolder, read, concat, save, createFolders, copy, list };
