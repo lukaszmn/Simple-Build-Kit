@@ -108,14 +108,14 @@ function _createFolders(destination, writeLog) {
 	function recursiveCreate(root, part) {
 		const pos = part.indexOf('/');
 		if (pos < 0) {
-			const newRoot = root + '/' + part;
+			const newRoot = (root ? root + '/' : '') + part;
 			if (!fs.existsSync(newRoot))
 				fs.mkdirSync(newRoot);
 		} else {
 			const prefix = part.substr(0, pos);
 			const suffix = part.substr(pos + 1);
 
-			const newRoot = root + '/' + prefix;
+			const newRoot = (root ? root + '/' : '') + prefix;
 			if (!fs.existsSync(newRoot))
 				fs.mkdirSync(newRoot);
 			if (suffix.length > 0)
@@ -123,11 +123,14 @@ function _createFolders(destination, writeLog) {
 		}
 	}
 
+	const root = (destination.includes(':') || destination.startsWith('/'))
+		? '' : '.';
+
 	if (destination.endsWith('/'))
-		recursiveCreate('.', destination);
+		recursiveCreate(root, destination);
 	else if (destination.includes('/')) {
 		const folder = destination.replace(/\/[^\/]+$/, '/');
-		recursiveCreate('.', folder);
+		recursiveCreate(root, folder);
 	}
 
 	if (writeLog)
