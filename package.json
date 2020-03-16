@@ -4,7 +4,8 @@
   "description": "A very lightweight build toolkit for Node.js",
   "main": "index.js",
   "scripts": {
-    "test": "titef test.js"
+    "test": "titef test.js",
+    "release": "standard-version"
   },
   "files": [
     "index.js"
@@ -27,6 +28,7 @@
   "devDependencies": {
     "fs-readdir-recursive": "^1.1.0",
     "mock-fs": "^4.10.4",
+    "standard-version": "^7.1.0",
     "titef": "^2.2.2"
   }
 }
