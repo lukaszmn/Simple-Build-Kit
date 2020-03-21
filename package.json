@@ -27,8 +27,8 @@
   "homepage": "https://github.com/lukaszmn/Simple-Build-Kit#readme",
   "devDependencies": {
     "fs-readdir-recursive": "^1.1.0",
-    "mock-fs": "^4.10.4",
+    "mock-fs": "^4.11.0",
     "standard-version": "^7.1.0",
-    "titef": "^2.2.2"
+    "titef": "^2.3.2"
   }
 }
